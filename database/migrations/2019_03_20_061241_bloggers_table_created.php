@@ -19,6 +19,7 @@ class BloggersTableCreated extends Migration
             $table->string('last_name', 50)->nullable()->default(null);
             $table->text('description');
             $table->integer('total_blogs')->unsigned()->default(0);
+            $table->float('rating')->default(0);
             $table->timestamps();
         });
     }

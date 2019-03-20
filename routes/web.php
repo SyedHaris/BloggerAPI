@@ -11,8 +11,13 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
 
-$router->post('/signup', 'UserController@signup');
+$router->get('bloggers', function(){
+
+    $blogger_repository = new \App\Repository\BloggerRepository();
+
+    $blogger = $blogger_repository->getAll(['id', 'first_name', 'last_name', 'description', 'total_blogs', 'rating']);
+
+    return \App\Utilities\JsonResponse::send(200, $blogger);
+
+});

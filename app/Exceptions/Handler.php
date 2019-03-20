@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Utilities\JsonResponse;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -11,7 +12,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
-    use \App\Utilities\JsonResponse;
     /**
      * A list of the exception types that should not be reported.
      *
@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return $this->sendResponse($exception->getCode(), null, $exception->message);
+        return JsonResponse::send(500, null, $exception->getMessage());
         // return parent::render($request, $exception);
     }
 }
