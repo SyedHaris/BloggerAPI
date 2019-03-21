@@ -11,5 +11,5 @@ namespace App\Repository;
 
 interface BloggerRepositoryInterface extends RepositoryInterface
 {
-    public function rate($stars);
+    public function rate($id, $stars);
 }

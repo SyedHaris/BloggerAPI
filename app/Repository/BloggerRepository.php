@@ -20,9 +20,9 @@ class BloggerRepository implements BloggerRepositoryInterface
         $this->table = $table;
     }
 
-    public function rate($stars)
+    public function rate($id, $stars)
     {
-        // TODO: Implement rate() method.
+        return DB::table($this->table)->where('id', $id)->update(['rating' => $stars]);
     }
 
     public function getByID($id, $columns = ['*'])
@@ -37,17 +37,29 @@ class BloggerRepository implements BloggerRepositoryInterface
 
     public function create(array $data)
     {
-        // TODO: Implement create() method.
+        return DB::table($this->table)->insertGetId([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'description' => $data['description'],
+            'total_blogs' => $data['total_blogs'],
+            'rating' => $data['rating']
+        ]);
     }
 
     public function update(array $data, $id)
     {
-        // TODO: Implement update() method.
+        return DB::table($this->table)->where('id', $id)->update([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'description' => $data['description'],
+            'total_blogs' => $data['total_blogs'],
+            'rating' => $data['rating']
+        ]);
     }
 
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        return DB::table($this->table)->where('id', $id)->delete();
     }
 
     public function findByName($name, $columns = ['*'])

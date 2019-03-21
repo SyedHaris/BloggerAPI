@@ -46,7 +46,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return JsonResponse::send(500, null, $exception->getMessage());
+        $http_code = 500;
+        if($exception instanceof ValidationException)
+            $http_code = 422;
+        return JsonResponse::send($http_code, null, $exception->getMessage());
         // return parent::render($request, $exception);
     }
 }

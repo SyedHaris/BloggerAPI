@@ -8,7 +8,7 @@ class JsonResponse
     public static function send($code = 200, $data = null, $error = null)
     {
         $response = [
-            'status' => ($code === 200 ? true : false),
+            'status' => ($code >= 200 && $code < 400 ? true : false),
             'response' => $data,
             'error' => $error  
         ];
