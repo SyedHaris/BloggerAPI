@@ -11,7 +11,7 @@ namespace App\Repository;
 use DB;
 
 
-class BloggerRepository implements BloggerRepositoryInterface
+class BloggerRepository implements RepositoryInterface
 {
     private $table;
 
@@ -30,8 +30,10 @@ class BloggerRepository implements BloggerRepositoryInterface
         // TODO: Implement getByID() method.
     }
 
-    public function getAll($columns = ['*'])
+    public function getAll($columns = ['*'], array $options = [])
     {
+        if($options && $options['name'])
+            return $this->findByName($options['name'], $columns);
         return DB::table($this->table)->get($columns);
     }
 
@@ -41,8 +43,7 @@ class BloggerRepository implements BloggerRepositoryInterface
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'description' => $data['description'],
-            'total_blogs' => $data['total_blogs'],
-            'rating' => $data['rating']
+            'total_blogs' => $data['total_blogs']
         ]);
     }
 
@@ -52,8 +53,7 @@ class BloggerRepository implements BloggerRepositoryInterface
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'description' => $data['description'],
-            'total_blogs' => $data['total_blogs'],
-            'rating' => $data['rating']
+            'total_blogs' => $data['total_blogs']
         ]);
     }
 
@@ -64,6 +64,6 @@ class BloggerRepository implements BloggerRepositoryInterface
 
     public function findByName($name, $columns = ['*'])
     {
-        // TODO: Implement findByName() method.
+        return DB::table($this->table)->where('first_name', 'LIKE', $name . '%')->orWhere('last_name', 'LIKE', '%' . $name )->get($columns);
     }
 }

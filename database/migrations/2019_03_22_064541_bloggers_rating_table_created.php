@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class BloggersTableCreated extends Migration
+class BloggersRatingTableCreated extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class BloggersTableCreated extends Migration
      */
     public function up()
     {
-        Schema::create('bloggers', function (Blueprint $table) {
+        Schema::create('blogger_rating', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('first_name', 50);
-            $table->string('last_name', 50)->nullable()->default(null);
-            $table->text('description');
-            $table->integer('total_blogs')->unsigned()->default(0);
-            $table->float('avg_rating')->default(0);
+            $table->unsignedInteger('blogger_id');
+            $table->float('rating')->default(0);
             $table->timestamps();
+        });
+
+        Schema::table('blogger_rating', function($table) {
+            $table->foreign('blogger_id')->references('id')->on('bloggers')->onDelete('cascade');
         });
     }
 
@@ -31,6 +32,6 @@ class BloggersTableCreated extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bloggers');
+        Schema::dropIfExists('blogger_rating');
     }
 }

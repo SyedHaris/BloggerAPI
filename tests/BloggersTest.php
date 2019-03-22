@@ -104,7 +104,7 @@ class BloggersTest extends TestCase
 
     public function testRateBloggers()
     {
-        $bloggers_repository = new \App\Repository\BloggerRepository();
+        $bloggers_repository = new \App\Repository\BloggerRatingRepository();
         $updated = $bloggers_repository->rate(static::$currentInsertedId, 4);
 
         return $this->assertTrue($updated === 1);

@@ -13,7 +13,7 @@ interface RepositoryInterface
 {
     public function getByID($id, $columns = ['*']);
 
-    public function getAll($columns = ['*']);
+    public function getAll($columns = ['*'], array $options);
 
     public function create(array $data);
 
