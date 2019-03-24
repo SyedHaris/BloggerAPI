@@ -12,4 +12,5 @@ namespace App\Repository;
 interface BloggerRatingRepositoryInterface
 {
     public function rate($id, $stars);
+
 }

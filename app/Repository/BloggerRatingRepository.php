@@ -13,20 +13,19 @@ use DB;
 
 class BloggerRatingRepository implements BloggerRatingRepositoryInterface
 {
-    private $table;
-    private $related_table;
+    private $model;
+    private $related_model;
 
-    public function __construct($table = 'blogger_rating', $related_table = 'bloggers')
+    public function __construct($model, $related_model)
     {
-        $this->table = $table;
-        $this->related_table = $related_table;
+        $this->table = $model;
+        $this->related_table = $related_model;
     }
-
 
     public function rate($id, $stars)
     {
-        DB::table($this->table)->insert(['rating' => $stars, 'blogger_id' => $id]);
-        $avg = DB::table($this->table)->where('blogger_id', $id)->avg('rating');
-        return DB::table($this->related_table)->where('id', $id)->update(['avg_rating' => $avg]);
+        $this->model->create(['rating' => $stars, 'blogger_id' => $id]);
+        $avg = $this->model->where('blogger_id', $id)->avg('rating');
+        return $this->related_model->where('id', $id)->update(['avg_rating' => $avg]);
     }
 }

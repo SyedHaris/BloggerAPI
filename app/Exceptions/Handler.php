@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Utilities\JsonResponse;
+use App\Utilities\Response;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
         $http_code = 500;
         if($exception instanceof ValidationException)
             $http_code = 422;
-        return JsonResponse::send($http_code, null, $exception->getMessage());
+        return Response::send($http_code, null, $exception->getMessage());
         // return parent::render($request, $exception);
     }
 }
