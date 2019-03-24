@@ -49,6 +49,6 @@ class EloquentBloggerRepository implements BloggerRepository
 
     public function findByName($name)
     {
-        return DB::table($this->table)->where('first_name', 'LIKE', $name . '%')->orWhere('last_name', 'LIKE', '%' . $name )->get();
+        return $this->model->where('first_name', 'LIKE', '%' . $name . '%')->orWhere('last_name', 'LIKE', '%' . $name . '%' )->get();
     }
 }

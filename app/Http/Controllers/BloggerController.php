@@ -20,8 +20,10 @@ class BloggerController
     }
 
 
-    public function list(){
-        $bloggers = $this->repository->getAll();
+    public function list(Request $request){
+        $name = $request->name ?? '';
+
+        $bloggers = $this->repository->getAll(['name' => $name]);
 
         return Response::send(200, $bloggers);
     }
