@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Haris
- * Date: 3/21/2019
- * Time: 1:34 AM
- */
+
 
 namespace App\Repository;
 
@@ -22,7 +17,7 @@ class EloquentBloggerRepository implements BloggerRepository
 
     public function getByID($id)
     {
-        // TODO: Implement getByID() method.
+        return $this->model->findOrFail($id);
     }
 
     public function getAll(array $options = [])

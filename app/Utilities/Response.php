@@ -21,6 +21,6 @@ class Response
             return response()->json($response, $code);
 
         else
-            return "Invalid content type";
+            return "Unsupported content type";
     }
 }

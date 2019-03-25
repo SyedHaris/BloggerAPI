@@ -23,11 +23,11 @@ class BloggersTest extends TestCase
 
     public function testGetBloggers()
     {
-        $bloggers_repository = new \App\Repository\BloggerRepository();
-        $bloggers = $bloggers_repository->getAll();
+        $bloggers_repository = new \App\Repository\EloquentBloggerRepository(new \App\Http\Models\Blogger());
+        $bloggers = $bloggers_repository->getAll()->toArray();
 
         if(count($bloggers) > 0)
-            return $this->assertObjectHasAttribute('first_name', $bloggers[0]);
+            $this->assertArrayHasKey('first_name', $bloggers[0]);
 
         return true;
     }
@@ -44,8 +44,8 @@ class BloggersTest extends TestCase
 
     public function testCreateBloggers()
     {
-        $bloggers_repository = new \App\Repository\BloggerRepository();
-        $created = $bloggers_repository->create([
+        $bloggers_repository = new \App\Repository\EloquentBloggerRepository(new \App\Http\Models\Blogger());
+        $blogger = $bloggers_repository->create([
             "first_name" => "Blogger",
 	        "last_name" => rand(5, 200),
 	        "description" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit metus ac ipsum maximus, non tristique purus interdum. Interdum et. ",
@@ -53,9 +53,9 @@ class BloggersTest extends TestCase
 	        "rating" => rand(2, 5)
         ]);
 
-        static::$currentInsertedId = $created;
+        static::$currentInsertedId = $blogger->id;
 
-        return $this->assertTrue($created !== 0);
+        $this->assertInstanceOf(\App\Http\Models\Blogger::class, $blogger);
     }
 
     public function testCreateBloggersAPI()
@@ -70,21 +70,20 @@ class BloggersTest extends TestCase
 
         $this->call('POST', '/bloggers', $data);
 
-        return $this->assertEquals(201, $this->response->status());
+        $this->assertEquals(200, $this->response->status());
     }
 
     public function testUpdateBloggers()
     {
-        $bloggers_repository = new \App\Repository\BloggerRepository();
+        $bloggers_repository = new \App\Repository\EloquentBloggerRepository(new \App\Http\Models\Blogger());
         $updated = $bloggers_repository->update([
             "first_name" => "Blogger",
             "last_name" => rand(5, 200),
             "description" => "Updated Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit metus ac ipsum maximus, non tristique purus interdum. Interdum et. ",
-            "total_blogs" => rand(1, 50),
-            "rating" => rand(2, 5)
+            "total_blogs" => rand(1, 50)
         ], static::$currentInsertedId);
 
-        return $this->assertTrue($updated === 1);
+        $this->assertTrue($updated === 1);
     }
 
     public function testUpdateBloggersAPI()
@@ -93,21 +92,20 @@ class BloggersTest extends TestCase
             "first_name" => "Blogger",
             "last_name" => rand(5, 200) . "",
             "description" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In suscipit metus ac ipsum maximus, non tristique purus interdum. Interdum et. ",
-            "total_blogs" => rand(1, 50),
-            "rating" => rand(2, 5)
+            "total_blogs" => rand(1, 50)
         ];
 
         $this->call('PUT', '/bloggers/' . static::$currentInsertedId , $data);
 
-        return $this->assertEquals(200, $this->response->status());
+        $this->assertEquals(200, $this->response->status());
     }
 
     public function testRateBloggers()
     {
-        $bloggers_repository = new \App\Repository\BloggerRatingRepository();
+        $bloggers_repository = new \App\Repository\EloquentBloggerRatingRepository(new \App\Http\Models\BloggerRating(), new \App\Http\Models\Blogger());
         $updated = $bloggers_repository->rate(static::$currentInsertedId, 4);
 
-        return $this->assertTrue($updated === 1);
+        $this->assertTrue($updated === 1);
     }
 
     public function testRateBloggersAPI()
@@ -116,15 +114,15 @@ class BloggersTest extends TestCase
 
         $this->call('PUT', '/bloggers/' . static::$currentInsertedId  . '/rating', $request);
 
-        return $this->assertEquals(200, $this->response->status());
+        $this->assertEquals(200, $this->response->status());
     }
 
     public function testDeleteBloggers()
     {
-        $bloggers_repository = new \App\Repository\BloggerRepository();
+        $bloggers_repository = new \App\Repository\EloquentBloggerRepository(new \App\Http\Models\Blogger());
         $updated = $bloggers_repository->delete(static::$currentInsertedId);
 
-        return $this->assertTrue($updated === 1);
+        $this->assertTrue($updated === 1);
     }
 
     public function testDeleteBloggersAPI()
@@ -132,7 +130,7 @@ class BloggersTest extends TestCase
 
         $this->call('DELETE', '/bloggers/' . static::$currentInsertedId);
 
-        return $this->assertEquals(200, $this->response->status());
+        $this->assertEquals(200, $this->response->status());
     }
 
 }

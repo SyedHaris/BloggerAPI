@@ -19,6 +19,13 @@ class BloggerController
         $this->repository = $repository;
     }
 
+    public function read(Request $request, $id)
+    {
+        $blogger = $this->repository->getByID($id);
+
+        return Response::send(200, $blogger);
+    }
+
 
     public function list(Request $request){
         $name = $request->name ?? '';
@@ -36,9 +43,9 @@ class BloggerController
             'total_blogs' => 'integer'
         ]);
 
-        $this->repository->create($request->all());
+        $blogger = $this->repository->create($request->all());
 
-        return Response::send(201);
+        return Response::send(201, $blogger);
     }
 
     public function update(Request $request, $id){
